@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import csv
 from datetime import datetime
 
-open_file= open("sitka_weather_2018_simple.csv","r")
+open_file= open("death_valley_2018_simple.csv","r")
 
 csv_file=csv.reader(open_file,delimiter=",")
 
@@ -12,6 +12,7 @@ print (type(header_row))
 
 for index,column_header in enumerate(header_row):
     print(index,column_header)
+
 
 highs=[]
 
@@ -25,16 +26,23 @@ print(type(mydate))
 dates=[]
 
 for x in csv_file:
-    highs.append(int(x[5]))
-    lows.append(int(x[6]))
-    the_date=datetime.strptime(x[2], "%Y-%m-%d")
-    dates.append(the_date)
+    try:
+        high = int(x[4])
+        low = int(x[5])
+        the_date=datetime.strptime(x[2], "%Y-%m-%d")
 
-print(dates)
+    except ValueError:
+        print(f"missing data for {the_date}") 
+    else: 
+        highs.append(high)
+        lows.append(low)
+        dates.append(the_date)
 
-print(highs)
+#print(dates)
 
-print(lows)
+#print(highs)
+
+#print(lows)
 
 import matplotlib.pyplot as plt
 
@@ -43,7 +51,7 @@ import matplotlib.pyplot as plt
 fig=plt.figure()
 
 
-plt.title("Daily High Temperatures, July 2018",fontsize=16)
+plt.title("Daily high and low temperatures- 2018\nDeath Valley",fontsize=16)
 plt.xlabel("",fontsize=12)
 plt.ylabel("Temperature (F)",fontsize=12)
 plt.tick_params(axis="both",labelsize=12)
@@ -52,7 +60,7 @@ plt.plot(dates, highs,c="pink",alpha=0.5)
 plt.plot(dates,lows, c="purple",alpha=0.5)
 plt.fill_between(dates,highs,lows,facecolor="blue",alpha=0.1)
 
-#plt.show()
+plt.show()
 
 #for subplot, the first argument is the number of rows, then columns, then it's index
 
